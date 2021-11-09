@@ -1,3 +1,5 @@
 *.csv
 *.exe
 *.txt
+main
+.DS_Store
