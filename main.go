@@ -15,14 +15,28 @@ var (
 
 func main() {
 	LogFile()
-	fmt.Println("Bitte hier angeben wie viele Etiketten erstellt werden sollen. (250 erstellt 500 Etiketten. Jeweils 2 Stück bis zur Zahl 250.")
+	// Get variables for amount of serial numbers that should be created
+	fmt.Println("\033[33mINFO: \033[34mPlease type the amount of serial numbers to be created\n\033[0mType 'delete' to delete the log files.")
 	s := ""
 	fmt.Scanln(&s)
+	// Check if user wants to delete the logs
+	if s == "delete" {
+		os.Remove("logs.txt")
+		fmt.Println("\033[33mINFO: \033[32mSuccess. \033[34mLogs have been deleted. Press ENTER to exit the program.")
+		fmt.Scanln()
+		os.Exit(0)
+	}
 	count, _ := strconv.Atoi(s)
-	upCount(count)
+
+	// Get variables for how often each serial number should be created
+	fmt.Println("\033[33mINFO: \033[34mHow often should every serial number be added? \033[0m(For e.g. 2 would add every serial number 2 times: 1 1 2 2 3 3 etc.)")
+	s2 := ""
+	fmt.Scanln(&s2)
+	count2, _ := strconv.Atoi(s2)
+	upCount(count, count2)
 }
 
-func upCount(count int) {
+func upCount(count int, count2 int) {
 	InfoLogger.Println("Generating CSV-File as Output.csv ...")
 	f, e := os.Create("./Output.csv")
 	if e != nil {
@@ -35,15 +49,22 @@ func upCount(count int) {
 		log.Fatal(err2)
 	}
 
+	// Creating the numbers for the labels and writing them to the CSV file
 	for i := 1; i < count+1; i++ {
 		tag := strconv.Itoa(i)
-		_, err2 := f.WriteString(tag + "\n" + tag + "\n")
-
-		if err2 != nil {
-			log.Fatal(err2)
+		for i2 := 0; i2 < count2; i2++ {
+			_, err2 := f.WriteString(tag + "\n")
+			if err2 != nil {
+				log.Fatal(err2)
+			}
 		}
 	}
-	InfoLogger.Println("Done. CSV-File exported as Output.csv")
+	countMessage := strconv.Itoa(count)
+	count2Message := strconv.Itoa(count2)
+	sum := count * count2
+	sumMessage := strconv.Itoa(sum)
+	fmt.Println("\033[33mINFO: \033[32mDone. \033[34mCSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
+	InfoLogger.Println("Done. CSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
 }
 
 func LogFile() {
