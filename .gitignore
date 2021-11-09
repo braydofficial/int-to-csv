@@ -2,4 +2,5 @@
 *.exe
 *.txt
 main
+int2csv
 .DS_Store
