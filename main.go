@@ -36,6 +36,7 @@ func main() {
 	upCount(count, count2)
 }
 
+// Counting up with the variables created trough the user input to create the right amount of entries in the CSV file
 func upCount(count int, count2 int) {
 	InfoLogger.Println("Generating CSV-File as Output.csv ...")
 	f, e := os.Create("./Output.csv")
