@@ -56,9 +56,11 @@ func upCount(count int, count2 int) {
 
 	// Creating the numbers for the labels and writing them to the CSV file
 	for i := 1; i < count+1; i++ {
-		tag := strconv.Itoa(i)
+		// Attach leading zeros and convert from int to string
+		res := fmt.Sprintf("%03d", i)
+
 		for i2 := 0; i2 < count2; i2++ {
-			_, err2 := f.WriteString(tag + "\n")
+			_, err2 := f.WriteString(res + "\n")
 			if err2 != nil {
 				log.Fatal(err2)
 			}
