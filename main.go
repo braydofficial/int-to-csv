@@ -37,18 +37,29 @@ func main() {
 	s2 := ""
 	fmt.Scanln(&s2)
 	count2, _ := strconv.Atoi(s2)
-	upCount(count, count2)
+
+	// Ask for DUNS number
+	fmt.Printf("\033[33mINFO: \033[34mType in the DUNS number you want to use (9 characters): ")
+	duns := ""
+	fmt.Scanln(&duns)
+
+	// Ask for container type (CT)
+	fmt.Printf("\033[33mINFO: \033[34mType in the container type: ")
+	containertype := ""
+	fmt.Scanln(&containertype)
+
+	upCount(count, count2, duns, containertype)
 }
 
 // Counting up with the variables created trough the user input to create the right amount of entries in the CSV file
-func upCount(count int, count2 int) {
+func upCount(count int, count2 int, duns string, containertype string) {
 	InfoLogger.Println("Generating CSV-File as Output.csv ...")
 	f, e := os.Create("./Output.csv")
 	if e != nil {
 		fmt.Println(e)
 	}
 	defer f.Close()
-	_, err2 := f.WriteString("SN\n")
+	_, err2 := f.WriteString("DUNS;CT;SN\n")
 
 	if err2 != nil {
 		log.Fatal(err2)
@@ -60,7 +71,7 @@ func upCount(count int, count2 int) {
 		res := fmt.Sprintf("%03d", i)
 
 		for i2 := 0; i2 < count2; i2++ {
-			_, err2 := f.WriteString(res + "\n")
+			_, err2 := f.WriteString(duns + ";" + containertype + ";" + res + "\n")
 			if err2 != nil {
 				log.Fatal(err2)
 			}
