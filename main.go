@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	functions "int2csv/functions"
 	"log"
 	"os"
 	"strconv"
@@ -21,7 +22,10 @@ func main() {
 	fmt.Scanln(&s)
 	// Check if user wants to delete the logs
 	if s == "delete" {
-		os.Remove("logs.txt")
+		err := os.Remove("./logs.txt")
+		if err != nil {
+			fmt.Println(err)
+		}
 		fmt.Println("\033[33mINFO: \033[32mSuccess. \033[34mLogs have been deleted. Press ENTER to exit the program.")
 		fmt.Scanln()
 		os.Exit(0)
@@ -60,10 +64,9 @@ func upCount(count int, count2 int) {
 			}
 		}
 	}
-	countMessage := strconv.Itoa(count)
-	count2Message := strconv.Itoa(count2)
-	sum := count * count2
-	sumMessage := strconv.Itoa(sum)
+	countMessage := functions.IntToString(count)
+	count2Message := functions.IntToString(count)
+	sumMessage := functions.Sum(count, count2)
 	fmt.Println("\033[33mINFO: \033[32mDone. \033[34mCSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
 	InfoLogger.Println("Done. CSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
 }
