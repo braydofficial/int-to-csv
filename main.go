@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	functions "int2csv/functions"
 	"log"
@@ -43,23 +44,39 @@ func main() {
 	duns := ""
 	fmt.Scanln(&duns)
 
-	// Ask for container type (CT)
-	fmt.Printf("\033[33mINFO: \033[34mType in the container type: ")
-	containertype := ""
-	fmt.Scanln(&containertype)
+	// Ask for container type (LT)
+	fmt.Printf("\033[33mINFO: \033[34mType in the LT number (6 characters): ")
+	ltnumber := ""
+	fmt.Scanln(&ltnumber)
 
-	upCount(count, count2, duns, containertype)
+	// Ask for project
+	fmt.Printf("\033[33mINFO: \033[34mType in the project: ")
+	scannerproject := bufio.NewScanner(os.Stdin)
+	var project string
+	if scannerproject.Scan() {
+		project = scannerproject.Text()
+	}
+
+	// Ask for "Bauteil"
+	fmt.Printf("\033[33mINFO: \033[34mType in the Bauteil: ")
+	scannerbauteil := bufio.NewScanner(os.Stdin)
+	var bauteil string
+	if scannerbauteil.Scan() {
+		bauteil = scannerbauteil.Text()
+	}
+
+	upCount(count, count2, duns, ltnumber, project, bauteil)
 }
 
 // Counting up with the variables created trough the user input to create the right amount of entries in the CSV file
-func upCount(count int, count2 int, duns string, containertype string) {
+func upCount(count int, count2 int, duns string, ltnumber string, project string, bauteil string) {
 	InfoLogger.Println("Generating CSV-File as Output.csv ...")
 	f, e := os.Create("./Output.csv")
 	if e != nil {
 		fmt.Println(e)
 	}
 	defer f.Close()
-	_, err2 := f.WriteString("DUNS;CT;SN\n")
+	_, err2 := f.WriteString("DUNS;LT;SN;PROJEKT;BAUTEIL;DM;RFID;\n")
 
 	if err2 != nil {
 		log.Fatal(err2)
@@ -68,10 +85,14 @@ func upCount(count int, count2 int, duns string, containertype string) {
 	// Creating the numbers for the labels and writing them to the CSV file
 	for i := 1; i < count+1; i++ {
 		// Attach leading zeros and convert from int to string
-		res := fmt.Sprintf("%03d", i)
+		sn := fmt.Sprintf("%09d", i)
+
+		// Concatinate RFID and DM variables
+		dm := "26BUN" + duns + ltnumber + "+" + sn
+		rfid := dm + "!"
 
 		for i2 := 0; i2 < count2; i2++ {
-			_, err2 := f.WriteString(duns + ";" + containertype + ";" + res + "\n")
+			_, err2 := f.WriteString(duns + ";" + ltnumber + ";" + sn + ";" + project + ";" + bauteil + ";" + dm + ";" + rfid + "\n")
 			if err2 != nil {
 				log.Fatal(err2)
 			}
