@@ -76,7 +76,7 @@ func upCount(count int, count2 int, duns string, ltnumber string, project string
 		fmt.Println(e)
 	}
 	defer f.Close()
-	_, err2 := f.WriteString("DUNS;LT;SN;PROJEKT;BAUTEIL;DM;RFID;\n")
+	_, err2 := f.WriteString("DUNS;LT;SN;PROJEKT;BAUTEIL;DM;RFID\n")
 
 	if err2 != nil {
 		log.Fatal(err2)
