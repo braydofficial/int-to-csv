@@ -146,7 +146,7 @@ func upCount_v1(count int, count2 int, duns string, containertype string) {
 		}
 	}
 	countMessage := functions.IntToString(count)
-	count2Message := functions.IntToString(count)
+	count2Message := functions.IntToString(count2)
 	sumMessage := functions.Sum(count, count2)
 	fmt.Println("\033[33mINFO: \033[32mDone. \033[34mCSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
 	InfoLogger.Println("Done. CSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
