@@ -25,7 +25,8 @@ func main() {
 	} else if csv_version == "2" {
 		version_two()
 	} else {
-		fmt.Println("\033[33mINFO: \033[34mYou have to choose between version 1 or 2. Exiting...")
+		fmt.Println("\033[33mINFO: \033[34mYou have to choose between version 1 or 2. Press ENTER to exit the program.")
+		fmt.Scanln()
 		os.Exit(0)
 	}
 }
