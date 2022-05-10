@@ -56,12 +56,12 @@ func version_one() {
 	count2, _ := strconv.Atoi(s2)
 
 	// Ask for DUNS number
-	fmt.Printf("\033[33mINFO: \033[34mType in the DUNS number you want to use (9 characters): ")
+	fmt.Printf("\033[33mINFO: \033[34mType in the DUNS number you want to use (9 characters):\033[0m ")
 	duns := ""
 	fmt.Scanln(&duns)
 
 	// Ask for container type (CT)
-	fmt.Printf("\033[33mINFO: \033[34mType in the container type: ")
+	fmt.Printf("\033[33mINFO: \033[34mType in the container type:\033[0m ")
 	containertype := ""
 	fmt.Scanln(&containertype)
 
