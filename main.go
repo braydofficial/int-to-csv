@@ -40,17 +40,17 @@ func main() {
 	count2, _ := strconv.Atoi(s2)
 
 	// Ask for DUNS number
-	fmt.Printf("\033[33mINFO: \033[34mType in the DUNS number you want to use (9 characters): ")
+	fmt.Printf("\033[33mINFO: \033[34mType in the DUNS number you want to use (9 characters):\033[0m ")
 	duns := ""
 	fmt.Scanln(&duns)
 
 	// Ask for container type (LT)
-	fmt.Printf("\033[33mINFO: \033[34mType in the LT number (6 characters): ")
+	fmt.Printf("\033[33mINFO: \033[34mType in the LT number (6 characters):\033[0m ")
 	ltnumber := ""
 	fmt.Scanln(&ltnumber)
 
 	// Ask for project
-	fmt.Printf("\033[33mINFO: \033[34mType in the project: ")
+	fmt.Printf("\033[33mINFO: \033[34mType in the project:\033[0m ")
 	scannerproject := bufio.NewScanner(os.Stdin)
 	var project string
 	if scannerproject.Scan() {
@@ -58,7 +58,7 @@ func main() {
 	}
 
 	// Ask for "Bauteil"
-	fmt.Printf("\033[33mINFO: \033[34mType in the Bauteil: ")
+	fmt.Printf("\033[33mINFO: \033[34mType in the Bauteil:\033[0m ")
 	scannerbauteil := bufio.NewScanner(os.Stdin)
 	var bauteil string
 	if scannerbauteil.Scan() {
@@ -70,8 +70,8 @@ func main() {
 
 // Counting up with the variables created trough the user input to create the right amount of entries in the CSV file
 func upCount(count int, count2 int, duns string, ltnumber string, project string, bauteil string) {
-	InfoLogger.Println("Generating CSV-File as Output.csv ...")
-	f, e := os.Create("./Output.csv")
+	InfoLogger.Println("Generating CSV-File as Output-AHA.csv...")
+	f, e := os.Create("./Output-AHA.csv")
 	if e != nil {
 		fmt.Println(e)
 	}
@@ -99,10 +99,10 @@ func upCount(count int, count2 int, duns string, ltnumber string, project string
 		}
 	}
 	countMessage := functions.IntToString(count)
-	count2Message := functions.IntToString(count)
+	count2Message := functions.IntToString(count2)
 	sumMessage := functions.Sum(count, count2)
-	fmt.Println("\033[33mINFO: \033[32mDone. \033[34mCSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
-	InfoLogger.Println("Done. CSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
+	fmt.Println("\033[33mINFO: \033[32mDone. \033[34mCSV-File exported as Output-AHA.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
+	InfoLogger.Println("Done. CSV-File exported as Output-AHA.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
 }
 
 func LogFile() {
