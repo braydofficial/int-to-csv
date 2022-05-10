@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	functions "int2csv/functions"
 	"log"
@@ -39,27 +40,43 @@ func main() {
 	count2, _ := strconv.Atoi(s2)
 
 	// Ask for DUNS number
-	fmt.Printf("\033[33mINFO: \033[34mType in the DUNS number you want to use (9 characters): ")
+	fmt.Printf("\033[33mINFO: \033[34mType in the DUNS number you want to use (9 characters):\033[0m ")
 	duns := ""
 	fmt.Scanln(&duns)
 
-	// Ask for container type (CT)
-	fmt.Printf("\033[33mINFO: \033[34mType in the container type: ")
-	containertype := ""
-	fmt.Scanln(&containertype)
+	// Ask for container type (LT)
+	fmt.Printf("\033[33mINFO: \033[34mType in the LT number (6 characters):\033[0m ")
+	ltnumber := ""
+	fmt.Scanln(&ltnumber)
 
-	upCount(count, count2, duns, containertype)
+	// Ask for project
+	fmt.Printf("\033[33mINFO: \033[34mType in the project:\033[0m ")
+	scannerproject := bufio.NewScanner(os.Stdin)
+	var project string
+	if scannerproject.Scan() {
+		project = scannerproject.Text()
+	}
+
+	// Ask for "Bauteil"
+	fmt.Printf("\033[33mINFO: \033[34mType in the Bauteil:\033[0m ")
+	scannerbauteil := bufio.NewScanner(os.Stdin)
+	var bauteil string
+	if scannerbauteil.Scan() {
+		bauteil = scannerbauteil.Text()
+	}
+
+	upCount(count, count2, duns, ltnumber, project, bauteil)
 }
 
 // Counting up with the variables created trough the user input to create the right amount of entries in the CSV file
-func upCount(count int, count2 int, duns string, containertype string) {
-	InfoLogger.Println("Generating CSV-File as Output.csv ...")
-	f, e := os.Create("./Output.csv")
+func upCount(count int, count2 int, duns string, ltnumber string, project string, bauteil string) {
+	InfoLogger.Println("Generating CSV-File as Output-AHA.csv...")
+	f, e := os.Create("./Output-AHA.csv")
 	if e != nil {
 		fmt.Println(e)
 	}
 	defer f.Close()
-	_, err2 := f.WriteString("DUNS;CT;SN\n")
+	_, err2 := f.WriteString("DUNS;LT;SN;PROJEKT;BAUTEIL;DM;RFID\n")
 
 	if err2 != nil {
 		log.Fatal(err2)
@@ -68,20 +85,24 @@ func upCount(count int, count2 int, duns string, containertype string) {
 	// Creating the numbers for the labels and writing them to the CSV file
 	for i := 1; i < count+1; i++ {
 		// Attach leading zeros and convert from int to string
-		res := fmt.Sprintf("%03d", i)
+		sn := fmt.Sprintf("%09d", i)
+
+		// Concatinate RFID and DM variables
+		dm := "26BUN" + duns + ltnumber + "+" + sn
+		rfid := dm + "!"
 
 		for i2 := 0; i2 < count2; i2++ {
-			_, err2 := f.WriteString(duns + ";" + containertype + ";" + res + "\n")
+			_, err2 := f.WriteString(duns + ";" + ltnumber + ";" + sn + ";" + project + ";" + bauteil + ";" + dm + ";" + rfid + "\n")
 			if err2 != nil {
 				log.Fatal(err2)
 			}
 		}
 	}
 	countMessage := functions.IntToString(count)
-	count2Message := functions.IntToString(count)
+	count2Message := functions.IntToString(count2)
 	sumMessage := functions.Sum(count, count2)
-	fmt.Println("\033[33mINFO: \033[32mDone. \033[34mCSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
-	InfoLogger.Println("Done. CSV-File exported as Output.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
+	fmt.Println("\033[33mINFO: \033[32mDone. \033[34mCSV-File exported as Output-AHA.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
+	InfoLogger.Println("Done. CSV-File exported as Output-AHA.csv. Every serial number has been created " + count2Message + " times. All together " + countMessage + " serial numbers have been created. Summed up this will create data for " + sumMessage + " labels.")
 }
 
 func LogFile() {
